@@ -1,38 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 
 export default function Contact() {
-  const sectionRef = useRef(null);
-
-  useEffect(() => {
-    let ctx;
-    async function animate() {
-      try {
-        const { gsap } = await import('gsap');
-        const { ScrollTrigger } = await import('gsap/ScrollTrigger');
-        gsap.registerPlugin(ScrollTrigger);
-        ctx = gsap.context(() => {
-          gsap.fromTo(
-            sectionRef.current,
-            { y: 24, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              ease: 'power3.out',
-              scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' }
-            }
-          );
-        });
-      } catch (e) {
-        // GSAP not available; fail silently
-      }
-    }
-    animate();
-    return () => ctx && ctx.revert();
-  }, []);
-
   return (
-    <section id="contact" ref={sectionRef} className="relative bg-black text-white py-20">
+    <section id="contact" className="relative bg-black text-white py-20">
       <div className="mx-auto max-w-7xl px-4 grid gap-8 md:grid-cols-2 items-center">
         <div>
           <h2 className="text-3xl md:text-4xl font-semibold">Let’s work together</h2>
@@ -44,7 +14,14 @@ export default function Contact() {
           </div>
         </div>
 
-        <form onSubmit={(e) => e.preventDefault()} className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5">
+        <motion.form
+          onSubmit={(e) => e.preventDefault()}
+          initial={{ y: 24, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5"
+        >
           <div className="grid gap-4">
             <div>
               <label className="block text-sm text-white/70">Name</label>
@@ -62,10 +39,18 @@ export default function Contact() {
               Send Message
             </button>
           </div>
-        </form>
+        </motion.form>
       </div>
 
-      <div className="mt-16 text-center text-white/50 text-sm">© {new Date().getFullYear()} Flames — All rights reserved.</div>
+      <motion.div
+        initial={{ y: 16, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+        className="mt-16 text-center text-white/50 text-sm"
+      >
+        © {new Date().getFullYear()} Flames — All rights reserved.
+      </motion.div>
     </section>
   );
 }
